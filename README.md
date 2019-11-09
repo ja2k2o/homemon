@@ -6,7 +6,7 @@ This first part focuses on setting up and securing the Raspberry Pi.
 
 ### Prepare with a Macbook Air
 
-Download a Raspbian image (lite will do). Official builds are available at `https://www.raspberrypi.org/downloads/`.
+Download a Raspbian image (lite will do). Official builds are available at <https://www.raspberrypi.org/downloads/>.
 
 Insert an SD card and write the image to the card. Replace `[n]` with correct disk number refering to the SD card.
 
