@@ -92,7 +92,7 @@ chmod u-w .ssh/* .[bpsv]* .
 logout
 ```
 
-Configure sudo. Login user must sudo in order to do anything.
+Configure sudo. Login user must sudo in order to do anything. Again, replace `[user]` with the username you created in the previous step.
 
 ```bash
 sudo -i
