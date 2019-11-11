@@ -1,4 +1,4 @@
-# Home monitoring with Raspberry Pi, 1-2-3
+# Setting up Raspberry Pi, 1-2-3
 
 ## Basic settings
 
