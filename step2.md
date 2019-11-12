@@ -49,8 +49,8 @@ influxUrl=https://[remote_host]/influxdb/
 
 influxDatabase=house
 
-influxUser=[db_username]
-influxPassword=[password_for_db_username]
+influxUser=ruuvi
+influxPassword=[secretpassword]
 
 influxGzip=false
 ```
