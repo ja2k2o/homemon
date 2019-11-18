@@ -143,6 +143,12 @@ http {
 }
 ```
 
+Inform SELinux that Nginx can connect to localhost.
+
+```bash
+sudo setsebool -P httpd_can_network_connect 1
+```
+
 Start Nginx.
 
 ```bash
