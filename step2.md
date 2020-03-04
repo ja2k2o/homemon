@@ -25,7 +25,7 @@ sudo setcap 'cap_net_raw,cap_net_admin+eip' `which hcidump`
 Ok, ready to build RuuviCollector.
 
 ```bash
-cd /src/git
+cd ~/src/git
 git clone https://github.com/Scrin/RuuviCollector
 cd RuuviCollector
 mvn clean package
@@ -69,8 +69,8 @@ After=network.target
 [Service]
 Type=simple
 User=pi
-WorkingDirectory=/home/pi/RuuviCollector
-ExecStart=/usr/bin/java -jar /home/pi/RuuviCollector/ruuvi-collector-0.2.jar
+WorkingDirectory=/home/pi/ruuvitag
+ExecStart=/usr/bin/java -jar /home/pi/ruuvitag/ruuvi-collector-0.2.jar
 Restart=always
 
 [Install]
