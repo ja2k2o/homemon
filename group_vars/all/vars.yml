@@ -1,0 +1,8 @@
+---
+
+timezone: Europe/Helsinki
+
+influxdb_url: https://host-4.keilarannanpalvelin.fi/influxdb/
+influxdb_primary_bucket: ruuvi
+influxdb_writer_username: ruuvi-collector
+influxdb_writer_password: "{{ vault_influxdb_writer_password }}"

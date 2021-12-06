@@ -1,0 +1,32 @@
+---
+
+- name: create docker volumes for influxdb
+  docker_volume:
+    name: "{{ item }}"
+    state: present
+  loop:
+    - influx-config
+    - influxdb-database
+
+- name: create docker-compose.yml file
+  template:
+    src: docker-compose.influxdb2.j2
+    dest: influxdb-grafana/docker-compose.yml
+
+- name: start influxdb for configuration
+  shell: docker-compose up -d influxdb
+  args:
+    chdir: influxdb-grafana
+
+- name: wait for the container to start up
+  pause:
+    seconds: 10
+
+- name: setup influxdb and add the admin user
+  shell: |
+    docker exec -it influxdb /bin/bash -c "influx setup -n default -u {{ primary_username }} -p {{ primary_password }} -o {{ primary_organization }} -b {{ primary_bucket }} -r 0 -f"
+    docker exec -it influxdb /bin/bash -c "influx user create -n {{ writer_username }} -p {{ writer_password} } -o {{  primary_organization}}"
+    docker exec -it influxdb /bin/bash -c "influx auth create -u {{ writer_username }} -d {{ writer_password }} -o {{ primary_organization }} --write-buckets"
+    docker exec -it influxdb /bin/bash -c "influx user create -n {{ reader_username }} -p {{ reader_password }} -o {{ primary_organization }}"
+    docker exec -it influxdb /bin/bash -c "influx auth create -u {{ reader_username }} -d {{ reader_password }} -o {{ primary_organization }} --read-buckets"
+    exit 0

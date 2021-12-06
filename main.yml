@@ -1,0 +1,131 @@
+---
+
+### Keep all software up to date
+
+- name: update servers
+  tags: update
+  hosts: all
+  tasks:
+  
+  - import_tasks: tasks/update_all.yml
+
+### Perform basic configuration for Pi OS
+
+- name: setup raspberry pi
+  tags: setuppi
+  hosts: raspberries
+  tasks:
+
+  - import_tasks: tasks/setup_pi.yml
+  - import_tasks: tasks/setup_pi_bluetooth.yml
+
+### Build ruuvi-collector for Pi OS
+
+- name: build ruuvi-collector
+  tags: build
+  hosts: raspberries
+  tasks:
+
+  - name: install java
+    apt:
+      pkg:
+      - openjdk-11-jdk-headless
+      - maven
+    become: yes
+
+  - name: fetch the latest RuuviCollector
+    git:
+      repo: https://github.com/Scrin/RuuviCollector
+      clone: yes
+      dest: git/RuuviCollector
+
+  - name: build RuuviCollector
+    command:
+      cmd: mvn clean package
+      chdir: git/RuuviCollector
+
+### Setup the RuuviCollector
+
+- name: configure ruuvi-collector
+  tags: ruuviconfig
+  hosts: raspberries
+  tasks:
+
+  - name: create a working directory for RuuviCollector
+    file:
+      name: RuuviCollector
+      state: directory
+
+  - name: copy the build target into working directory
+    command:
+      cmd: cp git/RuuviCollector/target/ruuvi-collector-0.2.jar RuuviCollector
+
+  - name: configure RuuviCollector
+    template:
+      src: ruuvi-collector.properties.j2
+      dest: RuuviCollector/ruuvi-collector.properties
+
+  - name: configure RuuviTag names
+    template:
+      src: ruuvi-names.properties
+      dest: RuuviCollector/ruuvi-names.properties
+
+  - name: create a service descriptor for RuuviCollector
+    template:
+      src: ruuvi-collector.service.j2
+      dest: /lib/systemd/system/ruuvi-collector.service
+    become: yes
+
+  - name: link to the service description
+    file:
+      src: /lib/systemd/system/ruuvi-collector.service
+      path: /etc/systemd/system/ruuvi-collector.service
+      state: link
+    become: yes
+
+### Setup InfluxDB and Grafana on the database host
+
+- name: setup database host
+  tags: setupdb
+  hosts: others
+  tasks:
+
+  - name: create a project directory
+    file:
+      name: influxdb-grafana
+      state: directory
+
+  - import_tasks: tasks/install_docker.yml
+
+  - name: create a docker network
+    docker_network:
+      name: influxdb-grafana
+      state: present
+
+  - name: create docker volumes for grafana
+    docker_volume:
+      name: grafana-database
+      state: present
+
+  - import_tasks: tasks/setup_influxdb1.yml
+
+### Start everything up
+
+- name: start InfluxDB and Grafana
+  tags: run
+  hosts: all
+  tasks:
+
+  - name: start containers
+    command:
+      chdir: influxdb-grafana
+      cmd: docker-compose up -d
+    when: inventory_hostname in groups['others']
+
+  - name: start ruuvi-collector
+    systemd:
+      name: ruuvi-collector
+      state: started
+      enabled: yes
+    when: inventory_hostname in groups['raspberries']
+    become: yes

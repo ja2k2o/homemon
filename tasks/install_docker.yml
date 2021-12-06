@@ -1,0 +1,36 @@
+---
+
+- name: apt install docker tools
+  when: ansible_facts['os_family'] == "Debian"
+  apt:
+    name:
+    - docker
+    - docker-compose
+    - python-docker-py
+  become: yes
+
+- name: yum install docker tools
+  when: ansible_facts['os_family'] == "RedHat"
+  yum:
+    name:
+    - docker
+    - docker-compose
+    - python-docker-py
+  become: yes
+
+- name: allow current login user to use docker
+  user:
+    name: "{{ ansible_user }}"
+    groups: docker
+    append: yes
+  become: yes
+
+- name: reset connection
+  meta: reset_connection
+
+- name: start docker daemon
+  systemd:
+    name: docker
+    state: started
+    enabled: yes
+  become: yes
