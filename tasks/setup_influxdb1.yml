@@ -1,0 +1,15 @@
+---
+
+- name: create docker volumes for influxdb
+  docker_volume:
+    name: influxdb-database
+    state: present
+
+- name: create a docker-compose.yml file
+  template:
+    src: docker-compose.influxdb1.j2
+    dest: influxdb-grafana/docker-compose.yml
+
+- name: configure influxdb
+  command:
+    cmd: docker run --rm -e INFLUXDB_DB={{ influxdb_primary_bucket }} -e INFLUXDB_ADMIN_ENABLED=true -e INFLUXDB_ADMIN_USER={{ influxdb_primary_username }} -e INFLUXDB_ADMIN_PASSWORD={{ influxdb_primary_password }} -e INFLUXDB_USER={{ influxdb_writer_username }} -e INFLUXDB_USER_PASSWORD={{ influxdb_writer_password }} -v influxdb-database:/var/lib/influxdb influxdb:1.8.4 /init-influxdb.sh

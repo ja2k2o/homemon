@@ -1,0 +1,18 @@
+---
+
+- name: install hcitools and hcidump
+  apt:
+    pkg:
+    - bluez
+    - bluez-hcidump
+  become: yes
+
+- name: set capabilities for hcitool and hcidump
+  capabilities:
+    path: "{{ item }}"
+    capability: cap_net_raw,cap_net_admin+eip
+    state: present
+  loop:
+    - /usr/bin/hcitool
+    - /usr/bin/hcidump
+  become: yes

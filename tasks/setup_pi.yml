@@ -1,0 +1,38 @@
+---
+
+- name: install basic system tools
+  apt:
+    name:
+    - apt-transport-https
+    - ca-certificates
+    - vim
+    - ufw
+    - git
+  become: yes
+
+- name: configure the firewall
+  ufw:
+    name: OpenSSH
+    rule: limit
+    state: enabled 
+    default: deny
+  become: yes
+
+- name: ensure sshd is running and started at boot
+  systemd:
+    name: ssh
+    state: started
+    enabled: yes
+  become: yes
+
+- name: set the timezone
+  timezone:
+    name: "{{ timezone }}"
+  become: yes
+
+- name: ensure timesyncd is running and started at boot
+  systemd:
+    name: systemd-timesyncd
+    state: started
+    enabled: yes
+  become: yes

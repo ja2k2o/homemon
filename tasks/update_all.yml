@@ -1,0 +1,19 @@
+---
+
+- name: apt upgrade
+  when: ansible_facts['os_family'] == "Debian"
+  apt:
+    upgrade: dist
+    autoclean: yes
+    autoremove: yes
+    update_cache: yes
+  become: yes
+
+- name: yum update
+  when: ansible_facts['os_family'] == "RedHat"
+  yum:
+    name: '*'
+    state: latest
+    update_only: yes
+    update_cache: yes
+  become: yes

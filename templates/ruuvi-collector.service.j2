@@ -1,0 +1,13 @@
+[Unit]
+Description=RuuviCollector Service
+After=network.target
+
+[Service]
+Type=simple
+User=pi
+WorkingDirectory=/home/{{ ansible_user }}/RuuviCollector
+ExecStart=/usr/bin/java -jar /home/{{ ansible_user }}/RuuviCollector/ruuvi-collector-0.2.jar
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
