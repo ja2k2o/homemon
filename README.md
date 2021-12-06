@@ -118,4 +118,4 @@ There are a few places for variables you need to check and modify based on your 
 
    and you should have everything build, configured and fired up automatically.
 
-At this point the Grafana visualization web interface is functional and accessible at your visualization host's local port 3000, `http://localhost:3000`. You should set up a web proxy (e.g. with nginx or Apache) with suitable access control mechanisms. Also, the InfluxDB API is open at `http://localhost:8086` and should be proxied accordingly. Installation and configuration of the proxy is not part of this documentation, but some basic instructions can be found [proxy.md](here).
+At this point the Grafana visualization web interface is functional and accessible at your visualization host's local port 3000, `http://localhost:3000`. You should set up a web proxy (e.g. with nginx or Apache) with suitable access control mechanisms. Also, the InfluxDB API is open at `http://localhost:8086` and should be proxied accordingly. Installation and configuration of the proxy is not part of this documentation, but some basic instructions can be found [here](proxy.md).
