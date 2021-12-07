@@ -7,9 +7,6 @@ ansible_sudo_pass: "{{ vault_ansible_sudo_pass }}"
 influxdb_primary_username: admin
 influxdb_primary_password: "{{ vault_influxdb_primary_password }}"
 influxdb_primary_organization_name: home
-influxdb_primary_bucket_name: ruuvi
-influxdb_writer_username: ruuvicollector
-influxdb_writer_password: "{{ vault_influxdb_writer_password }}"
 influxdb_reader_username: grafana
 influxdb_reader_password: "{{ vault_influxdb_reader_password }}"
 

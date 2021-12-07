@@ -29,7 +29,7 @@
   - name: install java
     apt:
       pkg:
-      - openjdk-11-jdk-headless
+      - default-jdk-headless
       - maven
     become: yes
 
@@ -111,7 +111,7 @@
 
 ### Start everything up
 
-- name: start InfluxDB and Grafana
+- name: start InfluxDB, Grafana, and RuuviCollector
   tags: run
   hosts: all
   tasks:

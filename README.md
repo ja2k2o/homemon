@@ -104,16 +104,18 @@ There are a few places for variables you need to check and modify based on your 
    | `host_vars/raspberrypi` | settings for the RuuviCollector host             |
    | `host_vars/host-4`      | settings for the database and visualization host |
 
-   The variable names in these files should be self-explanatory enough.
+   The variable names in these files should be self-explanatory enough. Any secrets, like passwords, are stored in encrypted Ansible vaults and require a passphrase to access. You will need to replace my vault files with your own vault files for these instructions to work. Use the `ansible-vault create` command to do that.
 
 2. You need to define which Ruuvi tags you want to read. You can obtain the ID's of the tags e.g. with Ruuvi mobile app and enter them in the `templates/ruuvi-names.properties` file. Ruuvi tags not listed in this file will not be read and no data from those tags are fed into the database. You can define whatever name you want for the tags.
 
-3. Currently, (March 2021) the RuuviCollector software does not support InfluxDB v2, but the templates include a configuration to set it up. However, InfluxDB v1.8 is being used. If you want to have InfluxDB v2 you need to modify the `main.yml` file.
+3. Currently, (March 2021) the RuuviCollector software does not support InfluxDB v2, but the templates do include a configuration to set it up. However, InfluxDB v1.8 is being used here. If you want to have InfluxDB v2 you will need to modify the `main.yml` file.
 
-4. After all the above is OK, just run
+4. In the rare case Debian (Pi OS is a Debian derivative) changes to a new stable release (e.g. from Buster to Bullseye) you must run `apt update --allow-releaseinfo-change` before the next step. Missing this will leave you with a non-booting system.
+
+5. After all the above is OK, just run
 
    ```bash
-   ansible-playbook -i hosts main.yml
+   ansible-playbook -i hosts main.yml --ask-vault-pass
    ```
 
    and you should have everything build, configured and fired up automatically.
