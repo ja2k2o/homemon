@@ -64,7 +64,7 @@ mkdir git && cd git && git clone https://github.com/arthepsy/ssh-audit.git
 python ssh-audit/ssh-audit localhost
 ```
 
-The green lines indicate safe algorithms to be used, so allowing _sshd_ to use only those lower the (already low) possibility of someone getting access to your Raspberry. So, include `KexAlgorithms`, `HostKeyAlgorithms`, `Ciphers`, and `MACs` configuration options populated with the green algorithms (comma separated) into the `/etc/ssh/sshd_config`. And while you are at it, also change `PermitRootLogin` to `no`. You should probably also limit who can log in and from where by adding `AllowUsers`, e.g. `AllowUsers *@192.168.1.0/24 pi@host`.
+The green lines indicate safe algorithms to be used, so allowing _sshd_ to use only those lowers the (already low) possibility of someone getting access to your Raspberry. So, include `KexAlgorithms`, `HostKeyAlgorithms`, `Ciphers`, and `MACs` configuration options populated with the green algorithms (comma separated) into the `/etc/ssh/sshd_config`. And while you are at it, also change `PermitRootLogin` to `no`. You should probably also limit who can log in and from where by adding `AllowUsers`, e.g. `AllowUsers *@192.168.1.0/24 pi@host`.
 
 While still logged in, restart _sshd_ and make sure you can log in before you log out from the Raspberry Pi.
 
@@ -106,7 +106,7 @@ There are a few places for variables you need to check and modify based on your 
 
    The variable names in these files should be self-explanatory enough. Any secrets, like passwords, are stored in encrypted Ansible vaults and require a passphrase to access. You will need to replace my vault files with your own vault files for these instructions to work. Use the `ansible-vault create` command to do that.
 
-2. You need to define which Ruuvi tags you want to read. You can obtain the ID's of the tags e.g. with Ruuvi mobile app and enter them in the `templates/ruuvi-names.properties` file. Ruuvi tags not listed in this file will not be read and no data from those tags are fed into the database. You can define whatever name you want for the tags.
+2. You need to define which Ruuvi tags you want to read. You can obtain the ID's of the tags e.g. with Ruuvi mobile app and enter them in the `templates/ruuvi-names.properties` file. Ruuvi tags not listed in this file will not be read and no data from those tags are fed into the database. You can define whatever names you want for the tags.
 
 3. Currently, (March 2021) the RuuviCollector software does not support InfluxDB v2, but the templates do include a configuration to set it up. However, InfluxDB v1.8 is being used here. If you want to have InfluxDB v2 you will need to modify the `main.yml` file.
 
